@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eclipse Gaming Community - WoW Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="eclipse-graphic">
+                <div class="eclipse-circle">
+                    <div class="eclipse-core"></div>
+                    <div class="eclipse-corona"></div>
+                    <div class="eclipse-ring"></div>
+                </div>
+            </div>
+            <h1 class="title">Eclipse Gaming Community</h1>
+            <p class="subtitle">World of Warcraft Guild & Blog Aggregator</p>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Loading...</span>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="applicants">Applicants</button>
+            <button class="tab" data-tab="guilds">Guilds</button>
+            <button class="tab" data-tab="blogs">Blogs</button>
+        </nav>
+
+        <main class="content">
+            <section id="applicants" class="tab-content active">
+                <div class="section-header">
+                    <h2>Raider.io Applicants</h2>
+                    <button class="refresh-btn" onclick="loadApplicants()">Refresh</button>
+                </div>
+                <div id="applicantsList" class="data-list">
+                    <div class="loading">Loading applicants...</div>
+                </div>
+            </section>
+
+            <section id="guilds" class="tab-content">
+                <div class="section-header">
+                    <h2>WoW Guilds</h2>
+                    <button class="refresh-btn" onclick="loadGuilds()">Refresh</button>
+                </div>
+                <div id="guildsList" class="data-list">
+                    <div class="loading">Loading guilds...</div>
+                </div>
+            </section>
+
+            <section id="blogs" class="tab-content">
+                <div class="section-header">
+                    <h2>Warcraft Blogs</h2>
+                    <button class="refresh-btn" onclick="loadBlogs()">Refresh</button>
+                </div>
+                <div id="blogsList" class="data-list">
+                    <div class="loading">Loading blogs...</div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Last updated: <span id="lastUpdated">Never</span></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

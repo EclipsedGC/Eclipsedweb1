@@ -7,17 +7,27 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "scraper": "node scraper/scheduler.js"
+    "scraper": "node scraper/scheduler.js",
+    "sync-sheets": "node scraper/google-sheets-scraper.js"
   },
-  "keywords": ["wow", "raider.io", "scraper", "portal"],
+  "keywords": [
+    "wow",
+    "raider.io",
+    "scraper",
+    "portal"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "cheerio": "^1.0.0-rc.12",
-    "node-cron": "^3.0.3",
     "axios": "^1.6.2",
-    "cors": "^2.8.5"
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^24.34.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
-

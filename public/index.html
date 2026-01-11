@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eclipse Gaming Community - WoW Portal</title>
+    <title>ECLIPSED - WoW Portal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <div class="eclipse-graphic">
-                <div class="eclipse-circle">
-                    <div class="eclipse-core"></div>
-                    <div class="eclipse-corona"></div>
-                    <div class="eclipse-ring"></div>
+            <div class="logo-container">
+                <div class="logo-text">
+                    <a href="#" class="logo-link">
+                        <img src="Homepagebutton.png" alt="ECLIPSED - US-Stormrage - When Darkness Descends, Heroes Will Rise" class="logo-image" />
+                    </a>
                 </div>
             </div>
-            <h1 class="title">Eclipse Gaming Community</h1>
-            <p class="subtitle">World of Warcraft Guild & Blog Aggregator</p>
+            <nav class="top-navigation">
+                <button class="nav-button">About Us</button>
+                <button class="nav-button">Guild Events</button>
+                <button class="nav-button">Guild Logs</button>
+                <button class="nav-button">Apply Here</button>
+                <button class="nav-button">Login or Sign Up</button>
+            </nav>
             <div class="status-indicator">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">Loading...</span>
@@ -26,11 +31,28 @@
 
         <nav class="tabs">
             <button class="tab active" data-tab="applicants">Applicants</button>
-            <button class="tab" data-tab="guilds">Guilds</button>
+            <button class="tab" data-tab="guilds">Raid Teams</button>
             <button class="tab" data-tab="blogs">Blogs</button>
+            <button class="tab" data-tab="raid-leaders">Raid Leaders</button>
+            <button class="tab" data-tab="applicant">Applicant</button>
+            <button class="tab" data-tab="community">Community</button>
+            <button class="tab" data-tab="team-editor">Team Editor</button>
         </nav>
 
-        <main class="content">
+        <div class="main-layout">
+            <!-- Left Sidebar: Guild Teams -->
+            <aside class="teams-sidebar">
+                <div class="sidebar-header">
+                    <h3>Guild Teams</h3>
+                    <button class="refresh-btn-small" onclick="loadGuildTeams()" title="Refresh teams">↻</button>
+                </div>
+                <div id="guildTeamsList" class="teams-list">
+                    <div class="loading">Loading guild teams...</div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="content">
             <section id="applicants" class="tab-content active">
                 <div class="section-header">
                     <h2>Raider.io Applicants</h2>
@@ -43,11 +65,11 @@
 
             <section id="guilds" class="tab-content">
                 <div class="section-header">
-                    <h2>WoW Guilds</h2>
+                    <h2>Raid Teams</h2>
                     <button class="refresh-btn" onclick="loadGuilds()">Refresh</button>
                 </div>
                 <div id="guildsList" class="data-list">
-                    <div class="loading">Loading guilds...</div>
+                    <div class="loading">Loading raid teams...</div>
                 </div>
             </section>
 
@@ -60,7 +82,103 @@
                     <div class="loading">Loading blogs...</div>
                 </div>
             </section>
-        </main>
+
+            <section id="raid-leaders" class="tab-content">
+                <div class="section-header">
+                    <h2>Raid Leaders</h2>
+                    <button class="refresh-btn" onclick="loadRaidLeaders()">Refresh</button>
+                </div>
+                <div id="raidLeadersList" class="data-list">
+                    <div class="loading">Loading raid leaders...</div>
+                </div>
+            </section>
+
+            <section id="applicant" class="tab-content">
+                <div class="section-header">
+                    <h2>Applicant Data</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button class="refresh-btn" onclick="syncGoogleSheets()" id="syncBtn">Sync from Google Sheets</button>
+                        <button class="refresh-btn" onclick="loadApplicant()">Refresh</button>
+                    </div>
+                </div>
+                <div id="syncStatus" style="margin-bottom: 10px; padding: 10px; background: var(--eclipse-surface); border-radius: 8px; font-size: 0.9rem; color: var(--eclipse-text-dim);"></div>
+                <div id="applicantContent" class="applicant-table-container">
+                    <div class="loading">Loading applicant data...</div>
+                </div>
+            </section>
+
+            <section id="community" class="tab-content">
+                <div class="section-header">
+                    <h2>Community</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="communityFilter" class="filter-dropdown" onchange="applyCommunityFilter()" style="padding: 8px 12px; background: var(--eclipse-surface); border: 1px solid var(--eclipse-accent); border-radius: 4px; color: var(--eclipse-text); font-size: 0.9rem;">
+                            <option value="all">All Players</option>
+                            <option value="95+">95%+ Performance</option>
+                            <option value="90-94">90-94% Performance</option>
+                            <option value="75-89">75-89% Performance</option>
+                            <option value="50-74">50-74% Performance</option>
+                            <option value="mythic">Mythic Raiders</option>
+                            <option value="heroic">Heroic Raiders</option>
+                            <option value="active">Active (7 days)</option>
+                        </select>
+                        <button class="refresh-btn" onclick="loadCommunity()">Refresh</button>
+                    </div>
+                </div>
+                <div id="communityList" class="data-list">
+                    <div class="loading">Loading community members...</div>
+                </div>
+            </section>
+
+            <section id="team-editor" class="tab-content">
+                <div class="section-header">
+                    <h2>Team Editor</h2>
+                    <button class="refresh-btn" onclick="loadTeamEditor()">Refresh</button>
+                </div>
+                <div id="teamEditorContent">
+                    <!-- Team Creation Form -->
+                    <div class="team-editor-form">
+                        <h3 id="teamEditorFormTitle">Add New Team</h3>
+                        <form id="teamEditorForm" onsubmit="saveTeam(event)">
+                            <div class="form-group">
+                                <label for="teamName">Team Name *</label>
+                                <input type="text" id="teamName" name="teamName" required placeholder="e.g., Mythic Raid Team 1" />
+                            </div>
+                            <div class="form-group">
+                                <label for="warcraftLogsUrl">Warcraft Logs Team URL</label>
+                                <input type="url" id="warcraftLogsUrl" name="warcraftLogsUrl" placeholder="https://www.warcraftlogs.com/guild/id/694290" />
+                                <small>Enter the direct link to the team's Warcraft Logs page (optional)</small>
+                                <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                    <button type="button" class="btn-secondary" onclick="fetchTeamRoster()" id="fetchRosterBtn">Fetch Team Data</button>
+                                    <button type="button" class="btn-secondary" onclick="createTeamWithNoUrl()" id="createNoUrlBtn">Create with no URL</button>
+                                </div>
+                                <small style="display: block; margin-top: 8px; color: var(--eclipse-text-dim);">After fetching or creating, click "Preview & Edit Team" to set the raid leader and assists in the editor.</small>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="refresh-btn" onclick="showTeamPreview()" id="previewTeamBtn" style="display: none;">Preview & Edit Team</button>
+                                <button type="submit" class="refresh-btn" id="saveTeamBtn" style="display: none;">Publish to Sidebar</button>
+                                <button type="button" class="refresh-btn" onclick="resetTeamForm()" id="cancelTeamBtn" style="display: none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Team Preview/Edit Section -->
+                    <div id="teamPreviewSection" class="team-preview-section" style="display: none;">
+                        <h3>Team Preview & Edit</h3>
+                        <div id="teamPreviewContent">
+                            <!-- Preview content will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Saved Teams List -->
+                    <div class="saved-teams-section">
+                        <h3>Saved Teams</h3>
+                        <div id="savedTeamsList" class="data-list">
+                            <div class="loading">Loading teams...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </main>
+        </div>
 
         <footer class="footer">
             <p>Last updated: <span id="lastUpdated">Never</span></p>

@@ -1,4 +1,3 @@
-YALL BITCHES
 # Kitana - WoW Portal
 
 A World of Warcraft guild applicant and blog aggregator portal with automated web scraping.
